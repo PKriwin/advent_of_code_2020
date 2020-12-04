@@ -1,21 +1,18 @@
-# AdventOfCode
+# ⭐️ Advent Of Code 2020
 
-**TODO: Add description**
+My implementation in Elixir to solve the puzzles of the 2020 edition of Advent of code ([www.adventofcode.com](https://www.adventofcode.com))
 
-## Installation
+### Prerequisites:
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `advent_of_code` to your list of dependencies in `mix.exs`:
+- elixir
+- hex/mix
 
-```elixir
-def deps do
-  [
-    {:advent_of_code, "~> 0.1.0"}
-  ]
-end
-```
+## Run
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/advent_of_code](https://hexdocs.pm/advent_of_code).
+From root folder run in terminal:
 
+`>iex -S mix`
+
+Then:
+
+`>iex(1) AdventOfCode.Puzzle1.resolve // replace 'Puzzle1' with the puzzle you want to see resolved`
