@@ -1,19 +1,20 @@
 defmodule AdventOfCode.Puzzle1 do
-  alias AdventOfCode.Utils.{InputReader}
+  alias AdventOfCode.{Utils}
+  alias Utils.{InputReader}
 
-  def resolve do
-    InputReader.read_input(1)
-    |> Enum.map(&String.to_integer/1)
-    |> find_result
-    |> IO.puts()
+  def get_input(), do: InputReader.read_input(1) |> Enum.map(&String.to_integer/1)
+
+  def find_result_for(input, set_size) do
+    Comb.combinations(input, set_size)
+    |> Enum.find(fn set -> Enum.sum(set) == 2020 end)
+    |> Enum.reduce(1, fn val, acc -> val * acc end)
   end
 
-  def find_result([_ | []]), do: "no result"
+  def resolve_first_part() do
+    Utils.resolve_puzzle(&get_input/0, fn input -> find_result_for(input, 2) end)
+  end
 
-  def find_result([number | tail]) do
-    case tail |> Enum.find(fn item -> number + item == 2020 end) do
-      nil -> find_result(tail)
-      value -> number * value
-    end
+  def resolve_second_part() do
+    Utils.resolve_puzzle(&get_input/0, fn input -> find_result_for(input, 3) end)
   end
 end
