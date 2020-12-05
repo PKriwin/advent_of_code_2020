@@ -1,7 +1,7 @@
 defmodule AdventOfCode do
-  alias AdventOfCode.{Puzzle1}
+  alias AdventOfCode.{Puzzle2}
 
   def main do
-    Puzzle1.resolve_second_part()
+    Puzzle2.resolve_first_part()
   end
 end

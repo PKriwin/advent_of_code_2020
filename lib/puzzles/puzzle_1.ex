@@ -11,10 +11,10 @@ defmodule AdventOfCode.Puzzle1 do
   end
 
   def resolve_first_part() do
-    Utils.resolve_puzzle(&get_input/0, fn input -> find_result_for(input, 2) end)
+    Utils.resolve_puzzle(&get_input/0, &find_result_for(&1, 2))
   end
 
   def resolve_second_part() do
-    Utils.resolve_puzzle(&get_input/0, fn input -> find_result_for(input, 3) end)
+    Utils.resolve_puzzle(&get_input/0, &find_result_for(&1, 3))
   end
 end
