@@ -1,7 +1,15 @@
 defmodule AdventOfCode do
-  alias AdventOfCode.{Puzzle2}
+  alias AdventOfCode.{Puzzle1, Puzzle2, Puzzle3}
 
-  def main do
-    Puzzle2.resolve_first_part() |> IO.puts()
+  def show_solutions do
+    puzzles = [Puzzle1, Puzzle2, Puzzle3]
+
+    puzzles
+    |> Enum.with_index(1)
+    |> Enum.each(fn {puzzle, index} ->
+      IO.puts("Solution for puzzle #{index}:")
+      IO.puts("Part 1: #{puzzle.resolve_first_part()}")
+      IO.puts("Part 2: #{puzzle.resolve_second_part()}")
+    end)
   end
 end
