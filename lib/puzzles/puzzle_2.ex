@@ -28,15 +28,17 @@ defmodule AdventOfCode.Puzzle2 do
     |> Enum.count()
   end
 
-  def letters_count({%{"min" => min, "max" => max, "letter" => letter}, password}) do
+  def letters_count({%{"min" => min_count, "max" => max_count, "letter" => letter}, password}) do
     count = count_letter_occurrence(password, letter)
-    count >= min and count <= max
+    count >= min_count and count <= max_count
   end
 
-  def letters_positions({%{"min" => min, "max" => max, "letter" => letter}, password}) do
+  def letters_positions(
+        {%{"min" => min_position, "max" => max_position, "letter" => letter}, password}
+      ) do
     password_letters = String.codepoints(password)
-    min_postion_set = Enum.at(password_letters, min - 1) == letter
-    max_postion_set = Enum.at(password_letters, max - 1) == letter
+    min_postion_set = Enum.at(password_letters, min_position - 1) == letter
+    max_postion_set = Enum.at(password_letters, max_position - 1) == letter
 
     (!min_postion_set and max_postion_set) or (min_postion_set and !max_postion_set)
   end
