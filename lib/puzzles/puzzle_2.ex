@@ -24,8 +24,7 @@ defmodule AdventOfCode.Puzzle2 do
   def count_letter_occurrence(word, letter) do
     word
     |> String.codepoints()
-    |> Enum.filter(&(&1 == letter))
-    |> Enum.count()
+    |> Enum.count(&(&1 == letter))
   end
 
   def letters_count({%{"min" => min_count, "max" => max_count, "letter" => letter}, password}) do
@@ -43,7 +42,7 @@ defmodule AdventOfCode.Puzzle2 do
     (!min_postion_set and max_postion_set) or (min_postion_set and !max_postion_set)
   end
 
-  def count_valid_passwords(input, policy), do: input |> Enum.filter(&policy.(&1)) |> Enum.count()
+  def count_valid_passwords(input, policy), do: input |> Enum.count(&policy.(&1))
 
   def resolve_first_part(), do: get_input() |> count_valid_passwords(&letters_count/1)
   def resolve_second_part(), do: get_input() |> count_valid_passwords(&letters_positions/1)
