@@ -6,15 +6,10 @@ defmodule AdventOfCode.Puzzle1 do
 
   def find_result_for(input, set_size) do
     Comb.combinations(input, set_size)
-    |> Enum.find(fn set -> Enum.sum(set) == 2020 end)
-    |> Enum.reduce(1, fn val, acc -> val * acc end)
+    |> Enum.find(&(Enum.sum(&1) == 2020))
+    |> Enum.reduce(1, &(&1 * &2))
   end
 
-  def resolve_first_part() do
-    Utils.resolve_puzzle(&get_input/0, &find_result_for(&1, 2))
-  end
-
-  def resolve_second_part() do
-    Utils.resolve_puzzle(&get_input/0, &find_result_for(&1, 3))
-  end
+  def resolve_first_part(), do: get_input() |> find_result_for(2)
+  def resolve_second_part(), do: get_input() |> find_result_for(3)
 end

@@ -13,7 +13,7 @@ defmodule AdventOfCode.Puzzle2 do
         "max" => String.to_integer(max),
         "letter" => letter
       },
-      password
+      String.trim(password)
     }
   end
 
@@ -28,12 +28,21 @@ defmodule AdventOfCode.Puzzle2 do
     |> Enum.count()
   end
 
-  def pasword_is_valid({%{"min" => min, "max" => max, "letter" => letter}, password}) do
+  def letters_count({%{"min" => min, "max" => max, "letter" => letter}, password}) do
     count = count_letter_occurrence(password, letter)
-    count >= min && count <= max
+    count >= min and count <= max
   end
 
-  def count_valid_passwords(input), do: input |> Enum.filter(&pasword_is_valid/1) |> Enum.count()
+  def letters_positions({%{"min" => min, "max" => max, "letter" => letter}, password}) do
+    password_letters = String.codepoints(password)
+    min_postion_set = Enum.at(password_letters, min - 1) == letter
+    max_postion_set = Enum.at(password_letters, max - 1) == letter
 
-  def resolve_first_part(), do: Utils.resolve_puzzle(&get_input/0, &count_valid_passwords/1)
+    (!min_postion_set and max_postion_set) or (min_postion_set and !max_postion_set)
+  end
+
+  def count_valid_passwords(input, policy), do: input |> Enum.filter(&policy.(&1)) |> Enum.count()
+
+  def resolve_first_part(), do: get_input() |> count_valid_passwords(&letters_count/1)
+  def resolve_second_part(), do: get_input() |> count_valid_passwords(&letters_positions/1)
 end
