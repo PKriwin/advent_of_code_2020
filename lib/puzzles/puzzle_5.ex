@@ -42,8 +42,7 @@ defmodule AdventOfCode.Puzzle5 do
   def missing_id(seat_ids) do
     seat_ids
     |> Enum.sort()
-    |> Enum.drop(-1)
-    |> Enum.chunk_every(2)
+    |> Enum.chunk_every(2, 2, :discard)
     |> Enum.find(fn [first, second] -> second - first != 1 end)
     |> (fn [previous, _] -> previous + 1 end).()
   end

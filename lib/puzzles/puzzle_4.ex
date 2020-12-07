@@ -2,20 +2,18 @@ defmodule AdventOfCode.Puzzle4 do
   alias AdventOfCode.{Utils}
   alias Utils.{InputReader}
 
-  def parse_passport(input_line) do
-    String.split(input_line, " ")
-    |> Enum.reduce(%{}, fn key_value, passport ->
-      [key, value] = String.split(key_value, ":")
-      Map.put(passport, key, value)
-    end)
-  end
-
   def get_input() do
     InputReader.read_input(4)
     |> Enum.chunk_by(&(&1 != ""))
+    |> Enum.filter(&(&1 != [""]))
     |> Enum.map(&Enum.join(&1, " "))
-    |> Enum.filter(&(&1 != ""))
-    |> Enum.map(&parse_passport/1)
+    |> Enum.map(fn input_line ->
+      String.split(input_line, " ")
+      |> Enum.reduce(%{}, fn key_value, passport ->
+        [key, value] = String.split(key_value, ":")
+        Map.put(passport, key, value)
+      end)
+    end)
   end
 
   def has_required_fields(passport) do
