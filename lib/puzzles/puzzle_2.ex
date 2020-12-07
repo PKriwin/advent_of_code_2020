@@ -2,33 +2,26 @@ defmodule AdventOfCode.Puzzle2 do
   alias AdventOfCode.{Utils}
   alias Utils.{InputReader}
 
-  def parse_input_line(line) do
-    [policy, password] = String.split(line, ":")
-    [range, letter] = String.split(policy, " ")
-    [min, max] = String.split(range, "-")
-
-    {
-      %{
-        "min" => String.to_integer(min),
-        "max" => String.to_integer(max),
-        "letter" => letter
-      },
-      String.trim(password)
-    }
-  end
-
   def get_input() do
-    InputReader.read_input(2) |> Enum.map(&parse_input_line/1)
-  end
+    InputReader.read_input(2)
+    |> Enum.map(fn line ->
+      [policy, password] = String.split(line, ":")
+      [range, letter] = String.split(policy, " ")
+      [min, max] = String.split(range, "-")
 
-  def count_letter_occurrence(word, letter) do
-    word
-    |> String.codepoints()
-    |> Enum.count(&(&1 == letter))
+      {
+        %{
+          "min" => String.to_integer(min),
+          "max" => String.to_integer(max),
+          "letter" => letter
+        },
+        String.trim(password)
+      }
+    end)
   end
 
   def letters_count({%{"min" => min_count, "max" => max_count, "letter" => letter}, password}) do
-    count = count_letter_occurrence(password, letter)
+    count = password |> String.codepoints() |> Enum.count(&(&1 == letter))
     count >= min_count and count <= max_count
   end
 

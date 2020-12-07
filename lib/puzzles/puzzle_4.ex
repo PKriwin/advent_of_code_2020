@@ -34,10 +34,10 @@ defmodule AdventOfCode.Puzzle4 do
       fn %{"eyr" => eyr} -> is_in_range(String.to_integer(eyr), 2020, 2030) end,
       fn %{"hgt" => hgt} ->
         String.match?(hgt, ~r/^(\d{2}in)|(\d{3}cm)$/iu) &&
-          String.split(hgt, ~r{(in|cm)}, include_captures: true)
+          String.split_at(hgt, -2)
           |> case do
-            [value, "cm", _] -> is_in_range(String.to_integer(value), 150, 193)
-            [value, "in", _] -> is_in_range(String.to_integer(value), 59, 76)
+            {value, "cm"} -> is_in_range(String.to_integer(value), 150, 193)
+            {value, "in"} -> is_in_range(String.to_integer(value), 59, 76)
           end
       end,
       fn %{"hcl" => hcl} -> String.match?(hcl, ~r/^#[0-9a-f]{6}$/iu) end,

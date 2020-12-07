@@ -10,10 +10,13 @@ defmodule AdventOfCode.Puzzle3 do
     |> Enum.take_every(down)
     |> Enum.with_index()
     |> Enum.reduce(0, fn {area, index}, trees_count ->
-      zone = rem(index * right + right, String.length(area))
-      zone_content = area |> String.codepoints() |> Enum.at(zone)
-
-      trees_count + if zone_content == "#", do: 1, else: 0
+      area
+      |> String.codepoints()
+      |> Enum.at(rem(index * right + right, String.length(area)))
+      |> case do
+        "#" -> trees_count + 1
+        "." -> trees_count
+      end
     end)
   end
 
