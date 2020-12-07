@@ -39,5 +39,15 @@ defmodule AdventOfCode.Puzzle5 do
     |> Enum.map(fn {row, column} -> row * 8 + column end)
   end
 
+  def missing_id(seat_ids) do
+    seat_ids
+    |> Enum.sort()
+    |> Enum.drop(-1)
+    |> Enum.chunk_every(2)
+    |> Enum.find(fn [first, second] -> second - first != 1 end)
+    |> (fn [previous, _] -> previous + 1 end).()
+  end
+
   def resolve_first_part(), do: get_input() |> to_seat_ids |> Enum.max()
+  def resolve_second_part(), do: get_input() |> to_seat_ids |> missing_id
 end
