@@ -36,7 +36,6 @@ defmodule AdventOfCode.Puzzle2 do
   end
 
   def count_valid_passwords(input, policy), do: input |> Enum.count(&policy.(&1))
-
   def resolve_first_part(), do: get_input() |> count_valid_passwords(&letters_count/1)
   def resolve_second_part(), do: get_input() |> count_valid_passwords(&letters_positions/1)
 end
