@@ -1,8 +1,18 @@
 defmodule AdventOfCode do
-  alias AdventOfCode.{Puzzle1, Puzzle2, Puzzle3, Puzzle4, Puzzle5, Puzzle6, Puzzle7}
+  alias AdventOfCode.{
+    Puzzle1,
+    Puzzle2,
+    Puzzle3,
+    Puzzle4,
+    Puzzle5,
+    Puzzle6,
+    Puzzle7,
+    Puzzle8,
+    Puzzle9
+  }
 
   def show_solutions do
-    puzzles = [Puzzle1, Puzzle2, Puzzle3, Puzzle4, Puzzle5, Puzzle6, Puzzle7]
+    puzzles = [Puzzle1, Puzzle2, Puzzle3, Puzzle4, Puzzle5, Puzzle6, Puzzle7, Puzzle8, Puzzle9]
 
     puzzles
     |> Enum.with_index(1)
