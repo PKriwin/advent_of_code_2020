@@ -1,8 +1,7 @@
 defmodule AdventOfCode.Puzzle9 do
-  alias AdventOfCode.{Utils}
-  alias Utils.{InputReader}
+  use AdventOfCode.Puzzle, no: 9
 
-  def get_input(), do: InputReader.read_input(9) |> Enum.map(&String.to_integer/1)
+  def parse_input(), do: get_input() |> Enum.map(&String.to_integer/1)
 
   def in_preamble(nb, preamble, nb_of_terms) do
     Comb.combinations(preamble, nb_of_terms)
@@ -41,6 +40,6 @@ defmodule AdventOfCode.Puzzle9 do
     |> (&(Enum.min(&1) + Enum.max(&1))).()
   end
 
-  def resolve_first_part(), do: get_input() |> first_nb_not_in_preamble()
-  def resolve_second_part(), do: get_input() |> encryption_weakness(25)
+  def resolve_first_part(), do: parse_input() |> first_nb_not_in_preamble()
+  def resolve_second_part(), do: parse_input() |> encryption_weakness()
 end

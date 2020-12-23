@@ -1,13 +1,12 @@
 defmodule AdventOfCode.Puzzle4 do
-  alias AdventOfCode.{Utils}
-  alias Utils.{InputReader}
+  use AdventOfCode.Puzzle, no: 4
 
-  def get_input() do
-    InputReader.read_input(4)
-    |> Enum.chunk_by(&(&1 != ""))
-    |> Enum.filter(&(&1 != [""]))
-    |> Enum.map(&Enum.join(&1, " "))
-    |> Enum.map(fn input_line ->
+  def parse_input() do
+    get_input()
+    |> Stream.chunk_by(&(&1 != ""))
+    |> Stream.filter(&(&1 != [""]))
+    |> Stream.map(&Enum.join(&1, " "))
+    |> Stream.map(fn input_line ->
       String.split(input_line, " ")
       |> Enum.reduce(%{}, fn key_value, passport ->
         [key, value] = String.split(key_value, ":")
@@ -50,6 +49,6 @@ defmodule AdventOfCode.Puzzle4 do
 
   def count_valid_passports(input, policy), do: input |> Enum.count(&policy.(&1))
 
-  def resolve_first_part(), do: get_input() |> count_valid_passports(&has_required_fields/1)
-  def resolve_second_part(), do: get_input() |> count_valid_passports(&valid_field_values/1)
+  def resolve_first_part(), do: parse_input() |> count_valid_passports(&has_required_fields/1)
+  def resolve_second_part(), do: parse_input() |> count_valid_passports(&valid_field_values/1)
 end

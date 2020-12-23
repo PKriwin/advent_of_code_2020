@@ -1,9 +1,8 @@
 defmodule AdventOfCode.Puzzle7 do
-  alias AdventOfCode.{Utils}
-  alias Utils.{InputReader}
+  use AdventOfCode.Puzzle, no: 7
 
-  def get_input() do
-    InputReader.read_input(7)
+  def parse_input() do
+    get_input()
     |> Enum.reduce(%{}, fn rule, rule_map ->
       [container_color, content] = String.split(rule, ~r/ bags contain /)
 
@@ -39,7 +38,7 @@ defmodule AdventOfCode.Puzzle7 do
   end
 
   def content_count(rules_map, color) do
-    preorder_tree_traversal(rules_map, color, fn -> [] end, fn children ->
+    preorder_tree_traversal(rules_map, color, fn -> 0 end, fn children ->
       children
       |> Enum.reduce(0, fn %{"color" => new_color, "quantity" => qty}, count ->
         count + qty + qty * content_count(rules_map, new_color)
@@ -48,7 +47,7 @@ defmodule AdventOfCode.Puzzle7 do
   end
 
   def resolve_first_part() do
-    rules_map = get_input()
+    rules_map = parse_input()
 
     rules_map
     |> Map.keys()
@@ -56,5 +55,5 @@ defmodule AdventOfCode.Puzzle7 do
     |> Enum.count(&MapSet.member?(&1, "shiny gold"))
   end
 
-  def resolve_second_part(), do: get_input() |> content_count("shiny gold")
+  def resolve_second_part(), do: parse_input() |> content_count("shiny gold")
 end

@@ -1,9 +1,8 @@
 defmodule AdventOfCode.Puzzle8 do
-  alias AdventOfCode.{Utils}
-  alias Utils.{InputReader}
+  use AdventOfCode.Puzzle, no: 8
 
-  def get_input() do
-    InputReader.read_input(8)
+  def parse_input() do
+    get_input()
     |> Enum.map(fn instruction ->
       [opcode, param] = Regex.run(~r/^(\w{3}) ([+-]\d+)$/, instruction, capture: :all_but_first)
       {String.to_atom(opcode), String.to_integer(param)}
@@ -24,7 +23,7 @@ defmodule AdventOfCode.Puzzle8 do
   def run(%Emulator{ip: ip, pgm: pgm, acc: acc} = state, state_history \\ []) do
     case validate_state(state, state_history) do
       {:error, reason} ->
-        {:crash, reason, %{at: ip, state_history: state_history}}
+        {:crash, reason, %{ip: ip, acc: acc, state_history: state_history}}
 
       :ok ->
         case Enum.at(pgm, ip) do
@@ -60,8 +59,7 @@ defmodule AdventOfCode.Puzzle8 do
   end
 
   def resolve_first_part(),
-    do: get_input() |> boot() |> (fn {:crash, at: %{acc: acc}} -> acc end).()
+    do: parse_input() |> boot() |> (fn {:crash, _, %{acc: acc}} -> acc end).()
 
-  def resolve_second_part(),
-    do: get_input() |> fix_and_boot()
+  def resolve_second_part(), do: parse_input() |> fix_and_boot()
 end
