@@ -21,7 +21,9 @@ defmodule AdventOfCode.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:comb, git: "https://github.com/tallakt/comb.git", tag: "master"}
+      {:comb, git: "https://github.com/tallakt/comb.git", tag: "master"},
+      {:flow, "~> 1.0"},
+      {:benchee, "~> 1.0", only: :dev}
     ]
   end
 end
