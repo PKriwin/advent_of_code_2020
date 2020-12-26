@@ -10,20 +10,24 @@ defmodule AdventOfCode.Puzzle11 do
   end
 
   def parse_input() do
+    if :ets.whereis(:seats_map) == :undefined do
+      :ets.new(:seats_map, [:named_table, :set, :public])
+    end
+
     get_input()
     |> Stream.map(&String.codepoints/1)
     |> Stream.with_index()
-    |> Enum.reduce(%{}, fn {row_content, row_index}, seat_map ->
+    |> Enum.flat_map(fn {row_content, row_index} ->
       row_content
       |> Stream.with_index()
-      |> Enum.reduce(%{}, fn {column_content, col_index}, row_seat_map ->
-        Map.put(row_seat_map, {row_index, col_index}, to_cell_content(column_content))
+      |> Enum.map(fn {column_content, col_index} ->
+        {{row_index, col_index}, to_cell_content(column_content)}
       end)
-      |> Map.merge(seat_map)
     end)
+    |> (&:ets.insert(:seats_map, &1)).()
   end
 
-  def adjacent_cells(seats_map, {row, col}) do
+  def adjacent_cells({row, col}) do
     adjacent_positions = [
       {row + 1, col},
       {row - 1, col},
@@ -35,47 +39,55 @@ defmodule AdventOfCode.Puzzle11 do
       {row - 1, col + 1}
     ]
 
-    adjacent_positions
-    |> Stream.map(&{&1, seats_map[&1]})
-    |> Stream.filter(&(elem(&1, 1) != nil))
-    |> Enum.reduce(%{}, &Map.put(&2, elem(&1, 0), elem(&1, 1)))
+    :ets.select(
+      :seats_map,
+      for(position <- adjacent_positions, do: {{position, :_}, [], [:"$_"]})
+    )
   end
 
-  def count_filled_seats(seats_map),
-    do:
-      seats_map
-      |> Map.to_list()
-      |> Stream.filter(fn {_, seat} -> seat == :filled_seat end)
-      |> Enum.count()
+  def filled_seats_count(), do: :ets.match(:seats_map, {:"$1", :filled_seat}) |> length
 
-  def apply_seat_rules(seats_map) do
-    seats_map
-    |> Map.to_list()
-    |> Enum.reduce(%{}, fn {cell_position, cell_value}, new_seats_map ->
-      filled_adjacent_cells_count = adjacent_cells(seats_map, cell_position) |> count_filled_seats
+  def apply_rule_for_seat({seat_position, fill_value}) do
+    filled_adjacent_cells_count =
+      adjacent_cells(seat_position)
+      |> Enum.count(fn {_, seat} -> seat == :filled_seat end)
 
-      Map.put(
-        new_seats_map,
-        cell_position,
-        cond do
-          cell_value == :empty_seat and filled_adjacent_cells_count == 0 -> :filled_seat
-          cell_value == :filled_seat and filled_adjacent_cells_count >= 4 -> :empty_seat
-          cell_value == :floor -> :floor
-          true -> cell_value
-        end
-      )
-    end)
-  end
-
-  def to_stable_state(seats_map, filled_seats_count \\ 0) do
-    new_seats_map = apply_seat_rules(seats_map)
-
-    case count_filled_seats(new_seats_map) do
-      ^filled_seats_count -> {new_seats_map, filled_seats_count}
-      new_seat_count -> to_stable_state(new_seats_map, new_seat_count)
+    case fill_value do
+      :empty_seat when filled_adjacent_cells_count == 0 -> :filled_seat
+      :filled_seat when filled_adjacent_cells_count >= 4 -> :empty_seat
+      _ -> fill_value
     end
   end
 
-  def resolve_first_part(), do: parse_input() |> to_stable_state() |> elem(1)
+  def apply_seat_rules() do
+    :ets.tab2list(:seats_map)
+    |> Flow.from_enumerable()
+    |> Flow.map(fn {cell_position, cell_value} = cell ->
+      if cell_value == :floor do
+        cell
+      else
+        {cell_position, apply_rule_for_seat(cell)}
+      end
+    end)
+    |> Flow.partition()
+    |> Enum.to_list()
+    |> (&:ets.insert(:seats_map, &1)).()
+  end
+
+  def apply_seat_rules_until_stable_state() do
+    actual_seats_count = filled_seats_count()
+    apply_seat_rules()
+
+    if filled_seats_count() != actual_seats_count do
+      apply_seat_rules_until_stable_state()
+    end
+  end
+
+  def resolve_first_part() do
+    parse_input()
+    apply_seat_rules_until_stable_state()
+    filled_seats_count()
+  end
+
   def resolve_second_part(), do: parse_input()
 end

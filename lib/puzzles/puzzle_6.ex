@@ -19,7 +19,6 @@ defmodule AdventOfCode.Puzzle6 do
   def unanimities_count_for_group(group) do
     group
     |> affirmatives_count_per_question_for_group
-    |> Map.to_list()
     |> Stream.filter(fn {_question, affirmative_counts} -> affirmative_counts == length(group) end)
     |> Enum.count()
   end
