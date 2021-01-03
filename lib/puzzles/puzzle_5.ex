@@ -46,8 +46,7 @@ defmodule AdventOfCode.Puzzle5 do
     seat_ids
     |> Enum.sort()
     |> Stream.chunk_every(2, 2, :discard)
-    |> Enum.find(fn [first, second] -> second - first != 1 end)
-    |> (&(hd(&1) + 1)).()
+    |> Enum.find_value(fn [first, second] -> if second - first != 1, do: first + 1 end)
   end
 
   def resolve_first_part(), do: get_input() |> to_seat_ids |> Enum.max()

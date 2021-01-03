@@ -13,10 +13,10 @@ defmodule AdventOfCode.Puzzle9 do
     all_numbers
     |> Enum.drop(preamble_size)
     |> Enum.with_index()
-    |> Enum.find(fn {nb, index} ->
-      !in_preamble(nb, Enum.slice(all_numbers, index..(index + preamble_size)), nb_of_terms)
+    |> Enum.find_value(fn {nb, index} ->
+      if !in_preamble(nb, Enum.slice(all_numbers, index..(index + preamble_size)), nb_of_terms),
+        do: nb
     end)
-    |> (&elem(&1, 0)).()
   end
 
   def encryption_weakness(all_numbers, preamble_size \\ 25, nb_of_terms \\ 2) do

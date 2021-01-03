@@ -5,8 +5,7 @@ defmodule AdventOfCode.Puzzle1 do
 
   def find_result_for(input, set_size) do
     Comb.combinations(input, set_size)
-    |> Enum.find(&(Enum.sum(&1) == 2020))
-    |> Enum.reduce(1, &(&1 * &2))
+    |> Enum.find_value(fn [a, b] -> if a + b == 2020, do: a * b end)
   end
 
   def resolve_first_part(), do: parse_input() |> find_result_for(2)

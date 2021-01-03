@@ -24,7 +24,7 @@ defmodule AdventOfCode.MixProject do
       {:comb, git: "https://github.com/tallakt/comb.git", tag: "master"},
       {:flow, "~> 1.0"},
       {:benchee, "~> 1.0", only: :dev},
-      {:exprof, "~> 0.2.0"}
+      {:math, "~> 0.6.0"}
     ]
   end
 end

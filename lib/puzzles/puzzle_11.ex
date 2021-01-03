@@ -58,11 +58,10 @@ defmodule AdventOfCode.Puzzle11 do
           [] -> nil
         end
       end)
-      |> Enum.find(&(&1 == :filled_seat or &1 == :empty_seat))
-      |> case do
+      |> Enum.find_value(fn
         :filled_seat -> 1
         _ -> 0
-      end
+      end)
     end)
     |> Enum.sum()
   end
