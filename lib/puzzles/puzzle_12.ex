@@ -77,15 +77,12 @@ defmodule AdventOfCode.Puzzle12 do
     {waypoint_as_position_x, waypoint_as_position_y} =
       {boat_position_x + waypoint_x, boat_position_y + waypoint_y}
 
-    qx =
-      boat_position_x + Math.cos(Math.deg2rad(angle)) * (waypoint_as_position_x - boat_position_x) -
-        Math.sin(Math.deg2rad(angle)) * (waypoint_as_position_y - boat_position_y)
-
-    qy =
-      boat_position_y + Math.sin(Math.deg2rad(angle)) * (waypoint_as_position_x - boat_position_x) +
-        Math.cos(Math.deg2rad(angle)) * (waypoint_as_position_y - boat_position_y)
-
-    {qx - boat_position_x, qy - boat_position_y}
+    {boat_position_x + Math.cos(Math.deg2rad(angle)) * (waypoint_as_position_x - boat_position_x) -
+       Math.sin(Math.deg2rad(angle)) * (waypoint_as_position_y - boat_position_y) -
+       boat_position_x,
+     boat_position_y + Math.sin(Math.deg2rad(angle)) * (waypoint_as_position_x - boat_position_x) +
+       Math.cos(Math.deg2rad(angle)) * (waypoint_as_position_y - boat_position_y) -
+       boat_position_y}
   end
 
   def move_boat_to_waypoint({boat_position_x, boat_position_y}, {offset_x, offset_y}, times),
@@ -125,7 +122,6 @@ defmodule AdventOfCode.Puzzle12 do
         Enum.member?(@rotations, direction) ->
           {boat_position, rotate_waypoint_around_boat(waypoint, boat_position, direction, value)}
       end
-      |> IO.inspect()
     end)
   end
 

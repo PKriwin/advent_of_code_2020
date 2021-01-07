@@ -27,9 +27,6 @@ defmodule AdventOfCode.Puzzle8 do
 
       :ok ->
         case Enum.at(pgm, ip) do
-          nil ->
-            acc
-
           {op_code, param} ->
             case op_code do
               :acc -> %{ip: ip + 1, acc: acc + param}
@@ -37,6 +34,9 @@ defmodule AdventOfCode.Puzzle8 do
               :nop -> %{ip: ip + 1}
             end
             |> (&run(Map.merge(state, &1), [Map.take(state, [:ip, :acc]) | state_history])).()
+
+          nil ->
+            acc
         end
     end
   end

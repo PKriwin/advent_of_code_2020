@@ -15,26 +15,26 @@ defmodule AdventOfCode.Puzzle4 do
     end)
   end
 
-  def has_required_fields(passport) do
+  def has_required_fields?(passport) do
     required_fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
 
     Enum.all?(required_fields, &Map.has_key?(passport, &1))
   end
 
-  def is_in_range(value, min, max), do: value >= min && value <= max
+  def in_range?(value, min, max), do: value >= min && value <= max
 
-  def valid_field_values(passport) do
+  def valid_field_values?(passport) do
     validators = [
-      &has_required_fields/1,
-      fn %{"byr" => byr} -> is_in_range(String.to_integer(byr), 1920, 2002) end,
-      fn %{"iyr" => iyr} -> is_in_range(String.to_integer(iyr), 2010, 2020) end,
-      fn %{"eyr" => eyr} -> is_in_range(String.to_integer(eyr), 2020, 2030) end,
+      &has_required_fields?/1,
+      fn %{"byr" => byr} -> in_range?(String.to_integer(byr), 1920, 2002) end,
+      fn %{"iyr" => iyr} -> in_range?(String.to_integer(iyr), 2010, 2020) end,
+      fn %{"eyr" => eyr} -> in_range?(String.to_integer(eyr), 2020, 2030) end,
       fn %{"hgt" => hgt} ->
         String.match?(hgt, ~r/^(\d{2}in)|(\d{3}cm)$/iu) &&
           String.split_at(hgt, -2)
           |> case do
-            {value, "cm"} -> is_in_range(String.to_integer(value), 150, 193)
-            {value, "in"} -> is_in_range(String.to_integer(value), 59, 76)
+            {value, "cm"} -> in_range?(String.to_integer(value), 150, 193)
+            {value, "in"} -> in_range?(String.to_integer(value), 59, 76)
           end
       end,
       fn %{"hcl" => hcl} -> String.match?(hcl, ~r/^#[0-9a-f]{6}$/iu) end,
@@ -49,6 +49,6 @@ defmodule AdventOfCode.Puzzle4 do
 
   def count_valid_passports(input, policy), do: input |> Enum.count(&policy.(&1))
 
-  def resolve_first_part(), do: parse_input() |> count_valid_passports(&has_required_fields/1)
-  def resolve_second_part(), do: parse_input() |> count_valid_passports(&valid_field_values/1)
+  def resolve_first_part(), do: parse_input() |> count_valid_passports(&has_required_fields?/1)
+  def resolve_second_part(), do: parse_input() |> count_valid_passports(&valid_field_values?/1)
 end
