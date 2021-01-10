@@ -25,7 +25,8 @@ defmodule AdventOfCode.MixProject do
       {:flow, "~> 1.0"},
       {:benchee, "~> 1.0", only: :dev},
       {:math, "~> 0.6.0"},
-      {:bitmap, "~> 1.0"}
+      {:bitmap, "~> 1.0"},
+      {:ets, "~> 0.8.1"}
     ]
   end
 end

@@ -12,7 +12,9 @@ defmodule AdventOfCode do
       AdventOfCode.Puzzle9,
       AdventOfCode.Puzzle10,
       AdventOfCode.Puzzle11,
-      AdventOfCode.Puzzle12
+      AdventOfCode.Puzzle12,
+      AdventOfCode.Puzzle13,
+      AdventOfCode.Puzzle14
     ]
 
     puzzles
