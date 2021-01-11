@@ -1,12 +1,11 @@
 defmodule AdventOfCode.Puzzle11 do
   use AdventOfCode.Puzzle, no: 11
+  alias ETS.Set
 
   @directions [:down, :up, :right, :left, :down_right, :up_left, :down_left, :up_right]
 
   def parse_input() do
-    if :ets.whereis(:seats_map) == :undefined do
-      :ets.new(:seats_map, [:named_table, :set, :public])
-    end
+    seats_map = Set.new!(protection: :public)
 
     get_input()
     |> Stream.map(&String.codepoints/1)
@@ -23,10 +22,12 @@ defmodule AdventOfCode.Puzzle11 do
          end}
       end)
     end)
-    |> (&:ets.insert(:seats_map, &1)).()
+    |> (&Set.put!(seats_map, &1)).()
+
+    seats_map
   end
 
-  def filled_seats_count(), do: :ets.match(:seats_map, {:"$1", :filled_seat}) |> length
+  def filled_seats_count(seats_map), do: Set.match!(seats_map, {:"$1", :filled_seat}) |> length
 
   def relative_position({row, col}, direction, offset) do
     case direction do
@@ -41,37 +42,39 @@ defmodule AdventOfCode.Puzzle11 do
     end
   end
 
-  def filled_adjacent_seats_count(cell) do
-    :ets.select(
-      :seats_map,
+  def filled_adjacent_seats_count(seats_map, cell) do
+    Set.select!(
+      seats_map,
       @directions |> Enum.map(&{{relative_position(cell, &1, 1), :_}, [], [:"$_"]})
     )
     |> Enum.count(fn {_, seat} -> seat == :filled_seat end)
   end
 
-  def filled_on_sight_seats_count(cell_position) do
+  def filled_on_sight_seats_count(seats_map, cell_position) do
     @directions
     |> Enum.map(fn direction ->
       Stream.unfold(1, fn offset ->
-        case :ets.lookup(:seats_map, relative_position(cell_position, direction, offset)) do
-          [{_, cell_content}] -> {cell_content, offset + 1}
-          [] -> nil
+        case Set.get!(seats_map, relative_position(cell_position, direction, offset)) do
+          {_, cell_content} -> {cell_content, offset + 1}
+          nil -> nil
         end
       end)
-      |> Enum.find_value(fn
+      |> Enum.find(&(&1 == :filled_seat or &1 == :empty_seat))
+      |> case do
         :filled_seat -> 1
         _ -> 0
-      end)
+      end
     end)
     |> Enum.sum()
   end
 
   def seat_rule(
+        seats_map,
         {cell_position, fill_value},
         count_surrounding_filled_seats,
         filled_seats_count_tolerance
       ) do
-    filled_surrounding_seats_count = count_surrounding_filled_seats.(cell_position)
+    filled_surrounding_seats_count = count_surrounding_filled_seats.(seats_map, cell_position)
 
     case fill_value do
       :empty_seat when filled_surrounding_seats_count == 0 ->
@@ -85,44 +88,44 @@ defmodule AdventOfCode.Puzzle11 do
     end
   end
 
-  def apply_seats_rule_until_stable_state(rule) do
-    actual_seats_count = filled_seats_count()
+  def apply_seats_rule_until_stable_state(seats_map, rule) do
+    actual_seats_count = filled_seats_count(seats_map)
 
-    :ets.tab2list(:seats_map)
+    Set.to_list!(seats_map)
     |> Flow.from_enumerable()
     |> Flow.map(fn {cell_position, cell_value} = cell ->
       if cell_value == :floor do
         cell
       else
-        {cell_position, rule.(cell)}
+        {cell_position, rule.(seats_map, cell)}
       end
     end)
     |> Flow.partition()
     |> Enum.to_list()
-    |> (&:ets.insert(:seats_map, &1)).()
+    |> (&Set.put(seats_map, &1)).()
 
-    if filled_seats_count() != actual_seats_count do
-      apply_seats_rule_until_stable_state(rule)
+    if filled_seats_count(seats_map) != actual_seats_count do
+      apply_seats_rule_until_stable_state(seats_map, rule)
     end
   end
 
   def resolve_first_part() do
-    parse_input()
+    seats_map = parse_input()
 
-    apply_seats_rule_until_stable_state(fn cell ->
-      seat_rule(cell, &filled_adjacent_seats_count/1, 4)
+    apply_seats_rule_until_stable_state(seats_map, fn seats_map, cell ->
+      seat_rule(seats_map, cell, &filled_adjacent_seats_count/2, 4)
     end)
 
-    filled_seats_count()
+    filled_seats_count(seats_map)
   end
 
   def resolve_second_part() do
-    parse_input()
+    seats_map = parse_input()
 
-    apply_seats_rule_until_stable_state(fn cell ->
-      seat_rule(cell, &filled_on_sight_seats_count/1, 5)
+    apply_seats_rule_until_stable_state(seats_map, fn seats_map, cell ->
+      seat_rule(seats_map, cell, &filled_on_sight_seats_count/2, 5)
     end)
 
-    filled_seats_count()
+    filled_seats_count(seats_map)
   end
 end
