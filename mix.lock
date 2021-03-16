@@ -1,12 +1,16 @@
 %{
   "benchee": {:hex, :benchee, "1.0.1", "66b211f9bfd84bd97e6d1beaddf8fc2312aaabe192f776e8931cb0c16f53a521", [:mix], [{:deep_merge, "~> 1.0", [hex: :deep_merge, repo: "hexpm", optional: false]}], "hexpm", "3ad58ae787e9c7c94dd7ceda3b587ec2c64604563e049b2a0e8baafae832addb"},
   "bitmap": {:hex, :bitmap, "1.0.1", "37d913e4f36e65ffffc3e38ee2bd2e8d768aedec6973de4bdce5c3456ef8a86e", [:mix], [], "hexpm", "341a29908d005b2414ecd214623733caccf9d65c94a50911046d89a365c9805f"},
+  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm", "7af5c7e09fe1d40f76c8e4f9dd2be7cebd83909f31fee7cd0e9eadc567da8353"},
   "comb": {:git, "https://github.com/tallakt/comb.git", "e6660924891d88d798494ab0c5adeefb29fae8b8", [tag: "master"]},
+  "credo": {:hex, :credo, "1.5.4", "9914180105b438e378e94a844ec3a5088ae5875626fc945b7c1462b41afc3198", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}, {:file_system, "~> 0.2.8", [hex: :file_system, repo: "hexpm", optional: false]}, {:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm", "cf51af45eadc0a3f39ba13b56fdac415c91b34f7b7533a13dc13550277141bc4"},
   "deep_merge": {:hex, :deep_merge, "1.0.0", "b4aa1a0d1acac393bdf38b2291af38cb1d4a52806cf7a4906f718e1feb5ee961", [:mix], [], "hexpm", "ce708e5f094b9cd4e8f2be4f00d2f4250c4095be93f8cd6d018c753894885430"},
   "ets": {:hex, :ets, "0.8.1", "8ff9bcda5682b98493f8878fc9dbd990e48d566cba8cce59f7c2a78130da29ea", [:mix], [], "hexpm", "6be41b50adb5bc5c43626f25ea2d0af1f4a242fb3fad8d53f0c67c20b78915cc"},
   "exprintf": {:hex, :exprintf, "0.2.1", "b7e895dfb00520cfb7fc1671303b63b37dc3897c59be7cbf1ae62f766a8a0314", [:mix], [], "hexpm", "20a0e8c880be90e56a77fcc82533c5d60c643915c7ce0cc8aa1e06ed6001da28"},
   "exprof": {:hex, :exprof, "0.2.4", "13ddc0575a6d24b52e7c6809d2a46e9ad63a4dd179628698cdbb6c1f6e497c98", [:mix], [{:exprintf, "~> 0.2", [hex: :exprintf, repo: "hexpm", optional: false]}], "hexpm", "0884bcb66afc421c75d749156acbb99034cc7db6d3b116c32e36f32551106957"},
+  "file_system": {:hex, :file_system, "0.2.10", "fb082005a9cd1711c05b5248710f8826b02d7d1784e7c3451f9c1231d4fc162d", [:mix], [], "hexpm", "41195edbfb562a593726eda3b3e8b103a309b733ad25f3d642ba49696bf715dc"},
   "flow": {:hex, :flow, "1.1.0", "b569c1042cb2da97103f6d70a0267a5657dce1402f41b4020bef98bbef9c7c1e", [:mix], [{:gen_stage, "~> 1.0", [hex: :gen_stage, repo: "hexpm", optional: false]}], "hexpm", "066f42f7a1ea6a86cb4ef763310338981a5cfb93bcebce10863a23a4859fd785"},
   "gen_stage": {:hex, :gen_stage, "1.0.0", "51c8ae56ff54f9a2a604ca583798c210ad245f415115453b773b621c49776df5", [:mix], [], "hexpm", "1d9fc978db5305ac54e6f5fec7adf80cd893b1000cf78271564c516aa2af7706"},
+  "jason": {:hex, :jason, "1.2.2", "ba43e3f2709fd1aa1dce90aaabfd039d000469c05c56f0b8e31978e03fa39052", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "18a228f5f0058ee183f29f9eae0805c6e59d61c3b006760668d8d18ff0d12179"},
   "math": {:hex, :math, "0.6.0", "69325af99e600123f6d994833502f6d063a2fa8f2786a3c0461fe6c6123a5166", [:mix], [], "hexpm", "2c73a64d64f719ee1f2821d382f3ed63e8e9564e5176d1c8aa777aac49b41bf7"},
 }

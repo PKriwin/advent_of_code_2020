@@ -1,9 +1,8 @@
 defmodule AdventOfCode.Puzzle15 do
   use AdventOfCode.Puzzle, no: 15
   alias ETS.Set
-  require IEx
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Enum.at(0)
     |> String.split(",")
@@ -39,6 +38,6 @@ defmodule AdventOfCode.Puzzle15 do
     |> List.last()
   end
 
-  def resolve_first_part(), do: parse_input() |> memory_game(2020)
-  def resolve_second_part(), do: parse_input() |> memory_game(30_000_000)
+  def resolve_first_part, do: parse_input() |> memory_game(2020)
+  def resolve_second_part, do: parse_input() |> memory_game(30_000_000)
 end

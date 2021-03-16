@@ -5,7 +5,7 @@ defmodule AdventOfCode.Puzzle14 do
     defstruct ip: 0, pgm: [], ram: %{}, mask: nil, acc: 0, rwm: nil
   end
 
-  def parse_input() do
+  def parse_input do
     instruction_patterns = [
       ~r/^mask = (?<mask>[01X]+)$/,
       ~r/^mem\[(?<address>\d+)\] = (?<value>\d+)$/
@@ -122,6 +122,6 @@ defmodule AdventOfCode.Puzzle14 do
 
   def boot(pgm, ram_write_mode), do: run(%Emulator{pgm: pgm, rwm: ram_write_mode})
 
-  def resolve_first_part(), do: parse_input() |> boot(:direct_masked) |> (& &1.acc).()
-  def resolve_second_part(), do: parse_input() |> boot(:mirrored) |> (& &1.acc).()
+  def resolve_first_part, do: parse_input() |> boot(:direct_masked) |> (& &1.acc).()
+  def resolve_second_part, do: parse_input() |> boot(:mirrored) |> (& &1.acc).()
 end

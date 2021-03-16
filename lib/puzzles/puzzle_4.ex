@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle4 do
   use AdventOfCode.Puzzle, no: 4
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Stream.chunk_by(&(&1 != ""))
     |> Stream.filter(&(&1 != [""]))
@@ -49,6 +49,6 @@ defmodule AdventOfCode.Puzzle4 do
 
   def count_valid_passports(input, policy), do: input |> Enum.count(&policy.(&1))
 
-  def resolve_first_part(), do: parse_input() |> count_valid_passports(&has_required_fields?/1)
-  def resolve_second_part(), do: parse_input() |> count_valid_passports(&valid_field_values?/1)
+  def resolve_first_part, do: parse_input() |> count_valid_passports(&has_required_fields?/1)
+  def resolve_second_part, do: parse_input() |> count_valid_passports(&valid_field_values?/1)
 end

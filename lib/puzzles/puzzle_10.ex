@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle10 do
   use AdventOfCode.Puzzle, no: 10
 
-  def parse_input() do
+  def parse_input do
     adapters = get_input() |> Enum.map(&String.to_integer/1)
     ([0] ++ adapters ++ [Enum.max(adapters) + 3]) |> Enum.sort()
   end
@@ -38,8 +38,8 @@ defmodule AdventOfCode.Puzzle10 do
     |> elem(1)
   end
 
-  def resolve_first_part(),
+  def resolve_first_part,
     do: parse_input() |> difference_map |> (&(&1[1] * &1[3])).()
 
-  def resolve_second_part(), do: parse_input() |> combinations_count
+  def resolve_second_part, do: parse_input() |> combinations_count
 end

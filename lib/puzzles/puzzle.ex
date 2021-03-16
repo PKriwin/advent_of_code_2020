@@ -5,7 +5,7 @@ defmodule AdventOfCode.Puzzle do
 
   defmacro __using__(no: no) do
     quote do
-      def get_input() do
+      def get_input do
         Path.join([:code.priv_dir(:advent_of_code), "inputs", "puzzle_#{unquote(no)}.txt"])
         |> File.stream!()
         |> Stream.map(&String.trim/1)

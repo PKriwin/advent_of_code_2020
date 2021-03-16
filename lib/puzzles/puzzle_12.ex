@@ -4,7 +4,7 @@ defmodule AdventOfCode.Puzzle12 do
   @cardinal_directions [:north, :east, :south, :west]
   @rotations [:left, :right]
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Stream.map(fn direction_and_value ->
       {direction, value} = String.split_at(direction_and_value, 1)
@@ -127,9 +127,9 @@ defmodule AdventOfCode.Puzzle12 do
 
   def manhattan_distance({x, y}), do: abs(x) + abs(y)
 
-  def resolve_first_part(),
+  def resolve_first_part,
     do: parse_input() |> move_boat_absolute |> (&manhattan_distance(&1[:position])).()
 
-  def resolve_second_part(),
+  def resolve_second_part,
     do: parse_input() |> move_boat_with_waypoint |> (&manhattan_distance(elem(&1, 0))).()
 end

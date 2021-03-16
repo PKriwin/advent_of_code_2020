@@ -4,7 +4,7 @@ defmodule AdventOfCode.Puzzle5 do
   @lower "L"
   @upper "U"
 
-  def parse_input(), do: get_input()
+  def parse_input, do: get_input()
 
   def binary_search(left_bound..right_bound, directions) do
     case directions do
@@ -49,6 +49,6 @@ defmodule AdventOfCode.Puzzle5 do
     |> Enum.find_value(fn [first, second] -> if second - first != 1, do: first + 1 end)
   end
 
-  def resolve_first_part(), do: get_input() |> to_seat_ids |> Enum.max()
-  def resolve_second_part(), do: get_input() |> to_seat_ids |> missing_id
+  def resolve_first_part, do: get_input() |> to_seat_ids |> Enum.max()
+  def resolve_second_part, do: get_input() |> to_seat_ids |> missing_id
 end

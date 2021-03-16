@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle6 do
   use AdventOfCode.Puzzle, no: 6
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Stream.chunk_by(&(&1 != ""))
     |> Stream.filter(&(&1 != [""]))
@@ -23,13 +23,13 @@ defmodule AdventOfCode.Puzzle6 do
     |> Enum.count()
   end
 
-  def resolve_first_part(),
-    do:
-      parse_input()
-      |> Stream.map(&affirmatives_count_per_question_for_group/1)
-      |> Stream.map(&map_size/1)
-      |> Enum.sum()
+  def resolve_first_part do
+    parse_input()
+    |> Stream.map(&affirmatives_count_per_question_for_group/1)
+    |> Stream.map(&map_size/1)
+    |> Enum.sum()
+  end
 
-  def resolve_second_part(),
+  def resolve_second_part,
     do: parse_input() |> Stream.map(&unanimities_count_for_group/1) |> Enum.sum()
 end

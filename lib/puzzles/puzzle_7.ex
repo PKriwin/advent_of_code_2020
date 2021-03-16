@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle7 do
   use AdventOfCode.Puzzle, no: 7
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Enum.reduce(%{}, fn rule, rule_map ->
       [container_color, content] = String.split(rule, ~r/ bags contain /)
@@ -46,7 +46,7 @@ defmodule AdventOfCode.Puzzle7 do
     end)
   end
 
-  def resolve_first_part() do
+  def resolve_first_part do
     rules_map = parse_input()
 
     rules_map
@@ -55,5 +55,5 @@ defmodule AdventOfCode.Puzzle7 do
     |> Enum.count(&MapSet.member?(&1, "shiny gold"))
   end
 
-  def resolve_second_part(), do: parse_input() |> content_count("shiny gold")
+  def resolve_second_part, do: parse_input() |> content_count("shiny gold")
 end

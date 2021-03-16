@@ -1,9 +1,8 @@
 defmodule AdventOfCode.Puzzle3 do
   use AdventOfCode.Puzzle, no: 3
+  def parse_input, do: get_input()
 
-  def parse_input(), do: get_input()
-
-  def count_trees(areas, _movement = {down, right}) do
+  def count_trees(areas, {down, right} = _movement) do
     areas
     |> Stream.drop(down)
     |> Stream.take_every(down)
@@ -27,6 +26,6 @@ defmodule AdventOfCode.Puzzle3 do
     |> Enum.reduce(1, &(&1 * &2))
   end
 
-  def resolve_first_part(), do: parse_input() |> count_trees({1, 3})
-  def resolve_second_part(), do: parse_input() |> multiply_trees_counts
+  def resolve_first_part, do: parse_input() |> count_trees({1, 3})
+  def resolve_second_part, do: parse_input() |> multiply_trees_counts
 end

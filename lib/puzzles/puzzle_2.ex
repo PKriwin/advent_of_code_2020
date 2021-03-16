@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle2 do
   use AdventOfCode.Puzzle, no: 2
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Enum.map(fn line ->
       [policy, password] = String.split(line, ":")
@@ -35,6 +35,6 @@ defmodule AdventOfCode.Puzzle2 do
   end
 
   def count_valid_passwords(input, policy), do: input |> Enum.count(&policy.(&1))
-  def resolve_first_part(), do: parse_input() |> count_valid_passwords(&letters_count/1)
-  def resolve_second_part(), do: parse_input() |> count_valid_passwords(&letters_positions/1)
+  def resolve_first_part, do: parse_input() |> count_valid_passwords(&letters_count/1)
+  def resolve_second_part, do: parse_input() |> count_valid_passwords(&letters_positions/1)
 end

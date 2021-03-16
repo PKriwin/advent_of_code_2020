@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle16 do
   use AdventOfCode.Puzzle, no: 16
 
-  def parse_input() do
+  def parse_input do
     data = get_input() |> Enum.to_list()
 
     %{
@@ -56,8 +56,46 @@ defmodule AdventOfCode.Puzzle16 do
       |> Stream.filter(fn ticket_fields ->
         ticket_fields |> Enum.all?(&valid?(&1, validation_rules))
       end)
+
+    field_groups =
+      0..(map_size(validation_rules) - 1)
+      |> Enum.map(fn index -> valid_nearby_tickets |> Enum.map(&Enum.at(&1, index)) end)
+
+    potential_rules_for_field_groups =
+      field_groups
+      |> Stream.with_index()
+      |> Enum.map(fn {field_group, index} ->
+        {index,
+         validation_rules
+         |> Stream.filter(fn rule -> Enum.all?(field_group, &valid?(&1, [rule])) end)
+         |> Enum.map(&elem(&1, 0))}
+      end)
+
+    potential_rules_for_field_groups
+    |> Stream.unfold(fn potential_rules_for_field_groups ->
+      case potential_rules_for_field_groups |> Enum.find(&(length(elem(&1, 1)) == 1)) do
+        nil ->
+          nil
+
+        {index, [rule]} ->
+          {{index, rule},
+           potential_rules_for_field_groups
+           |> Enum.map(fn {index, rules} ->
+             {index, rules |> Enum.reject(&(&1 == rule))}
+           end)}
+      end
+    end)
+    |> Map.new()
+    |> Stream.map(&elem(&1, 1))
   end
 
-  def resolve_first_part(), do: parse_input() |> error_rate()
-  def resolve_second_part(), do: parse_input() |> ticket_fields_order()
+  def resolve_first_part, do: parse_input() |> error_rate()
+
+  def resolve_second_part do
+    raw_data = parse_input()
+
+    Stream.zip(ticket_fields_order(raw_data), raw_data[:current_ticket])
+    |> Stream.filter(fn {field_name, _} -> String.contains?(field_name, "departure") end)
+    |> Enum.reduce(1, &(elem(&1, 1) * &2))
+  end
 end

@@ -4,7 +4,7 @@ defmodule AdventOfCode.Puzzle11 do
 
   @directions [:down, :up, :right, :left, :down_right, :up_left, :down_left, :up_right]
 
-  def parse_input() do
+  def parse_input do
     seats_map = Set.new!(protection: :public)
 
     get_input()
@@ -109,23 +109,22 @@ defmodule AdventOfCode.Puzzle11 do
     end
   end
 
-  def resolve_first_part() do
+  def count_filled_seats_at_stable_state(
+        count_surrounding_filled_seats,
+        filled_seats_count_tolerance
+      ) do
     seats_map = parse_input()
 
     apply_seats_rule_until_stable_state(seats_map, fn seats_map, cell ->
-      seat_rule(seats_map, cell, &filled_adjacent_seats_count/2, 4)
+      seat_rule(seats_map, cell, count_surrounding_filled_seats, filled_seats_count_tolerance)
     end)
 
     filled_seats_count(seats_map)
   end
 
-  def resolve_second_part() do
-    seats_map = parse_input()
+  def resolve_first_part,
+    do: count_filled_seats_at_stable_state(&filled_adjacent_seats_count/2, 4)
 
-    apply_seats_rule_until_stable_state(seats_map, fn seats_map, cell ->
-      seat_rule(seats_map, cell, &filled_on_sight_seats_count/2, 5)
-    end)
-
-    filled_seats_count(seats_map)
-  end
+  def resolve_second_part,
+    do: count_filled_seats_at_stable_state(&filled_on_sight_seats_count/2, 5)
 end

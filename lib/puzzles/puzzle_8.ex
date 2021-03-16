@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Puzzle8 do
   use AdventOfCode.Puzzle, no: 8
 
-  def parse_input() do
+  def parse_input do
     get_input()
     |> Enum.map(fn instruction ->
       [opcode, param] = Regex.run(~r/^(\w{3}) ([+-]\d+)$/, instruction, capture: :all_but_first)
@@ -14,9 +14,10 @@ defmodule AdventOfCode.Puzzle8 do
   end
 
   def validate_state(%Emulator{ip: ip}, state_history) do
-    cond do
-      Enum.find(state_history, &(&1.ip == ip)) != nil -> {:error, :duplicate_ip}
-      true -> :ok
+    if Enum.find(state_history, &(&1.ip == ip)) != nil do
+      {:error, :duplicate_ip}
+    else
+      :ok
     end
   end
 
@@ -58,8 +59,8 @@ defmodule AdventOfCode.Puzzle8 do
     end)
   end
 
-  def resolve_first_part(),
+  def resolve_first_part,
     do: parse_input() |> boot() |> (fn {:crash, _, %{acc: acc}} -> acc end).()
 
-  def resolve_second_part(), do: parse_input() |> fix_and_boot()
+  def resolve_second_part, do: parse_input() |> fix_and_boot()
 end
