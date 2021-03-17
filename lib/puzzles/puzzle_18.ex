@@ -1,8 +1,7 @@
 defmodule AdventOfCode.Puzzle18 do
   use AdventOfCode.Puzzle, no: 18
 
-  @operators ~w(add substract multiply)a
-  @parenthesis ~w(l_parenthesis r_parenthesis)a
+  @operators ~w(add multiply)a
 
   def parse_input do
     get_input()
@@ -13,7 +12,6 @@ defmodule AdventOfCode.Puzzle18 do
         "(" -> :l_parenthesis
         ")" -> :r_parenthesis
         "+" -> :add
-        "-" -> :substract
         "*" -> :multiply
         number -> String.to_integer(number)
       end)
@@ -24,7 +22,6 @@ defmodule AdventOfCode.Puzzle18 do
     operation =
       case operator do
         :add -> &Kernel.+/2
-        :substract -> &Kernel.-/2
         :multiply -> &Kernel.*/2
       end
 
@@ -43,18 +40,30 @@ defmodule AdventOfCode.Puzzle18 do
     |> hd()
   end
 
-  def infix_to_postfix(tokens) do
+  def infix_to_postfix(tokens, addition_has_higher_precedence \\ false) do
     tokens
     |> Enum.reduce({[], []}, fn
       token, {queue, stack} when is_number(token) ->
         {queue ++ [token], stack}
 
-      token, {queue, stack} when token == :r_parenthesis ->
-        {to_enqueue, [:l_parenthesis | stack]} = Enum.split_while(stack, &(&1 != :l_parenthesis))
-        {queue ++ to_enqueue, stack}
+      :r_parenthesis, {queue, stack} ->
+        {to_enqueue, [:l_parenthesis | stack_tail]} =
+          Enum.split_while(stack, &(&1 != :l_parenthesis))
 
-      token, {queue, [stack_top | stack]} when token in @operators and stack_top in @operators ->
-        {queue ++ [stack_top], [token | stack]}
+        {queue ++ to_enqueue, stack_tail}
+
+      token, {queue, [stack_top | stack_tail] = stack}
+      when token in @operators and stack_top in @operators ->
+        if addition_has_higher_precedence do
+          if token == :multiply and stack_top == :add do
+            {to_enqueue, new_stack_tail} = Enum.split_while(stack, &(&1 == :add))
+            {queue ++ to_enqueue, [token | new_stack_tail]}
+          else
+            {queue, [token | stack]}
+          end
+        else
+          {queue ++ [stack_top], [token | stack_tail]}
+        end
 
       token, {queue, stack} ->
         {queue, [token | stack]}
@@ -63,12 +72,13 @@ defmodule AdventOfCode.Puzzle18 do
     |> Enum.concat()
   end
 
-  def resolve_first_part do
-    parse_input()
-    |> Stream.map(&infix_to_postfix/1)
+  def sum_all_expression(expressions, addition_has_higher_precedence \\ false) do
+    expressions
+    |> Stream.map(&infix_to_postfix(&1, addition_has_higher_precedence))
     |> Stream.map(&postfix_eval/1)
     |> Enum.sum()
   end
 
-  def resolve_second_part, do: parse_input()
+  def resolve_first_part, do: parse_input() |> sum_all_expression()
+  def resolve_second_part, do: parse_input() |> sum_all_expression(true)
 end
