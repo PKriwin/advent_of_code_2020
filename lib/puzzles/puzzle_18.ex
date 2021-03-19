@@ -52,18 +52,18 @@ defmodule AdventOfCode.Puzzle18 do
 
         {queue ++ to_enqueue, stack_tail}
 
-      token, {queue, [stack_top | stack_tail] = stack}
-      when token in @operators and stack_top in @operators ->
-        if addition_has_higher_precedence do
-          if token == :multiply and stack_top == :add do
-            {to_enqueue, new_stack_tail} = Enum.split_while(stack, &(&1 == :add))
-            {queue ++ to_enqueue, [token | new_stack_tail]}
-          else
-            {queue, [token | stack]}
-          end
+      token, {queue, [stack_top | _] = stack}
+      when token in @operators and stack_top in @operators and addition_has_higher_precedence ->
+        if token == :multiply and stack_top == :add do
+          {to_enqueue, new_stack_tail} = Enum.split_while(stack, &(&1 == :add))
+          {queue ++ to_enqueue, [token | new_stack_tail]}
         else
-          {queue ++ [stack_top], [token | stack_tail]}
+          {queue, [token | stack]}
         end
+
+      token, {queue, [stack_top | stack_tail]}
+      when token in @operators and stack_top in @operators ->
+        {queue ++ [stack_top], [token | stack_tail]}
 
       token, {queue, stack} ->
         {queue, [token | stack]}
