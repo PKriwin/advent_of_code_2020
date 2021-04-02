@@ -12,6 +12,20 @@ defmodule AdventOfCode.Puzzle13 do
      |> Enum.map(&{elem(&1, 1), String.to_integer(elem(&1, 0))})}
   end
 
+  def chinese_remainder(rems, mods) do
+    big_n = Enum.reduce(mods, 1, &(&1 * &2))
+    nis = Enum.map(mods, &div(big_n, &1))
+    nis_inv = Enum.zip(nis, mods) |> Enum.map(fn {ni, mod} -> Math.mod_inv!(ni, mod) end)
+
+    x =
+      Enum.zip([rems, nis, nis_inv])
+      |> Enum.reduce(0, fn {r, ni, ni_inv}, sum ->
+        sum + r * ni * ni_inv
+      end)
+
+    rem(x, big_n)
+  end
+
   def earliest_departure(ideal_departure, bus_ids) do
     bus_ids
     |> Enum.map(&{&1, div(ideal_departure, &1) * &1 + &1})
@@ -27,5 +41,11 @@ defmodule AdventOfCode.Puzzle13 do
     bus_id * time_to_wait
   end
 
-  def resolve_second_part, do: parse_input()
+  def resolve_second_part do
+    {_, bus_schedule} = parse_input()
+    mods = Enum.map(bus_schedule, &elem(&1, 1))
+    rems = [0 | Enum.drop(bus_schedule, 1) |> Enum.map(fn {pos, nb} -> nb - pos end)]
+
+    chinese_remainder(rems, mods)
+  end
 end
